@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+
+  "name": "Image Capturer",
+  "description": "This extension allows users to drag an image to the popup tab and see the description of it",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_title": "Drag images"
+  },
+  "background": {
+    "scripts": [
+      "script/background.js"
+    ],
+    "persistent": true
+  },
+  "permissions": [
+    "activeTab",
+    "tabs"
+  ]
+}
