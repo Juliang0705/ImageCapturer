@@ -33,7 +33,7 @@ function addCloseButton(parent){
 }
 
 function addImageFrame(parent){
-    var imageFrame = $('<div></div>')
+    var imageFrame = $('<div id="ImageCapture-ImageFrame"></div>')
         .css({
             width: '30%',
             height: '30%',
@@ -47,16 +47,46 @@ function addImageFrame(parent){
 
     return imageFrame;
 }
+
+function getImgSrc(mObj)
+{
+    var ret = '';
+    if( mObj.length > 1 )
+    {
+        $(mObj).each(function(idx,obj){
+            ret = getImgSrc(obj);
+            if( ret != '') { return; }
+        });
+    }
+    else if( $(mObj).children().length > 0 )
+    {
+        $(mObj).children().each(function(idx,obj){
+            ret = getImgSrc(obj);
+            if( ret != '') { return; }
+        });
+    }
+    else if( $(mObj).prop('tagName').toUpperCase() == 'IMG' )
+    {
+        ret =  $(mObj).attr('src');
+    }
+    return ret;
+}
+
+
 function addDragAndDrop(widget){
     widget.on('dragover',function(event){
         event.stopPropagation();
         event.preventDefault();
-        event.dataTransfer.dropEffect = 'copy';
     });
-    widget.on('drop',function(event){
-
-       alert('dropped');
-    });
+    //JQuery doesn't work on this
+    widget[0].addEventListener('drop',function(event){
+        event.stopPropagation();
+        event.preventDefault();
+        var imageUrl = event.dataTransfer.getData('text/html');
+        var $iu = $(imageUrl);
+        var url = getImgSrc($iu);
+        $('#ImageCapture-ImageFrame').append($('<img src='+ url +'/>'));
+    },false);
 }
 (function() {
     var popup = createPopUp();
