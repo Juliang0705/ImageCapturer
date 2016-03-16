@@ -2,7 +2,7 @@
     set up the pop up panel
  */
 function createPopUp(){
-    var popup = $('<div></div>')
+    var popup = $('<div id="ImageCapturer-Panel"></div>')
         .css({
             zIndex : 2147483647,
             position: 'fixed',
@@ -33,7 +33,7 @@ function addCloseButton(parent){
 }
 
 function addImageFrame(parent){
-    var imageFrame = $('<div id="ImageCapture-ImageFrame"></div>')
+    var imageFrame = $('<div id="ImageCapturer-ImageFrame"></div>')
         .css({
             width: '30%',
             height: '30%',
@@ -73,24 +73,35 @@ function getImgSrc(mObj)
 }
 
 
-function addDragAndDrop(widget){
-    widget.on('dragover',function(event){
+function addDragAndDrop(){
+    $('#ImageCapturer-Panel')[0].addEventListener('dragover',function(event){
         event.stopPropagation();
         event.preventDefault();
-    });
+        event.dataTransfer.dropEffect = 'copy';
+    },false);
     //JQuery doesn't work on this
-    widget[0].addEventListener('drop',function(event){
+    $('#ImageCapturer-Panel')[0].addEventListener('drop',function(event){
         event.stopPropagation();
         event.preventDefault();
         var imageUrl = event.dataTransfer.getData('text/html');
         var $iu = $(imageUrl);
-        var url = getImgSrc($iu);
-        $('#ImageCapture-ImageFrame').append($('<img src='+ url +'/>'));
+       // var url = getImgSrc($iu);
+        console.debug($iu[1]);
+        var imageClone = $iu[1];
+        //var capturedImage = $('<img src='+ url +'/>').css({
+        //    'position' :'absolute',
+        //    'max-width': '10%',
+        //    'max-height': '10%',
+        //    'transform': 'scale(10)',
+        //    'top' : '55px',
+        //    'left' : '55px'
+        //});
+        $('#ImageCapturer-ImageFrame').append(imageClone);
     },false);
 }
 (function() {
     var popup = createPopUp();
     addCloseButton(popup);
     addImageFrame(popup);
-    addDragAndDrop(popup);
+    addDragAndDrop();
 })();
