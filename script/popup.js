@@ -1,7 +1,7 @@
 /*
     set up the pop up panel
  */
-function createPopUp(){
+function createPanel(){
     var popup = $('<div id="ImageCapturer-Panel"></div>')
         .css({
             zIndex : 2147483647,
@@ -43,34 +43,34 @@ function addImageFrame(parent){
         })
         .appendTo(parent);
     imageFrame.css("left", (parent.width()-imageFrame.width())/2);
-    imageFrame.css("top", (parent.height()-imageFrame.height())/2);
+    imageFrame.css("top", (parent.height()-imageFrame.height())/6);
 
     return imageFrame;
 }
-
-function getImgSrc(mObj)
-{
-    var ret = '';
-    if( mObj.length > 1 )
-    {
-        $(mObj).each(function(idx,obj){
-            ret = getImgSrc(obj);
-            if( ret != '') { return; }
-        });
-    }
-    else if( $(mObj).children().length > 0 )
-    {
-        $(mObj).children().each(function(idx,obj){
-            ret = getImgSrc(obj);
-            if( ret != '') { return; }
-        });
-    }
-    else if( $(mObj).prop('tagName').toUpperCase() == 'IMG' )
-    {
-        ret =  $(mObj).attr('src');
-    }
-    return ret;
-}
+//
+//function getImgSrc(mObj)
+//{
+//    var ret = '';
+//    if( mObj.length > 1 )
+//    {
+//        $(mObj).each(function(idx,obj){
+//            ret = getImgSrc(obj);
+//            if( ret != '') { return; }
+//        });
+//    }
+//    else if( $(mObj).children().length > 0 )
+//    {
+//        $(mObj).children().each(function(idx,obj){
+//            ret = getImgSrc(obj);
+//            if( ret != '') { return; }
+//        });
+//    }
+//    else if( $(mObj).prop('tagName').toUpperCase() == 'IMG' )
+//    {
+//        ret =  $(mObj).attr('src');
+//    }
+//    return ret;
+//}
 
 
 function addDragAndDrop(){
@@ -83,24 +83,39 @@ function addDragAndDrop(){
     $('#ImageCapturer-Panel')[0].addEventListener('drop',function(event){
         event.stopPropagation();
         event.preventDefault();
+        var frame = $('#ImageCapturer-ImageFrame');
         var imageUrl = event.dataTransfer.getData('text/html');
         var $iu = $(imageUrl);
-       // var url = getImgSrc($iu);
-        console.debug($iu[1]);
         var imageClone = $iu[1];
-        //var capturedImage = $('<img src='+ url +'/>').css({
-        //    'position' :'absolute',
-        //    'max-width': '10%',
-        //    'max-height': '10%',
-        //    'transform': 'scale(10)',
-        //    'top' : '55px',
-        //    'left' : '55px'
-        //});
-        $('#ImageCapturer-ImageFrame').append(imageClone);
+        console.debug(imageClone);
+        //check if the element is image
+        if ($(imageClone).is('img') === false){
+            return;
+        }else{
+            //empty the current one
+            frame.empty();
+        }
+        var cloneContainer = $('<div></div>').append(imageClone);
+        frame.append(cloneContainer);
+        cloneContainer.css({
+            position: 'absolute',
+            width: '100%',
+            height: '100%'
+        });
+        cloneContainer.css("left", (frame.width()-cloneContainer.width())/2);
+        cloneContainer.css("top", (frame.height()-cloneContainer.height())/2);
+        cloneContainer.css("top", (frame.height()-cloneContainer.height())/2);
+        $(imageClone).css({
+            position: 'absolute',
+            width : '100%',
+            height : '100%'
+        });
     },false);
 }
+
+
 (function() {
-    var popup = createPopUp();
+    var popup = createPanel();
     addCloseButton(popup);
     addImageFrame(popup);
     addDragAndDrop();
