@@ -81,7 +81,8 @@ function addImageTextToPanel(text){
         .css({
             margin: '10px auto',
             'text-align': 'center',
-            padding : '0px 5px'
+            padding : '0px 5px',
+            color: 'white'
         })
         .appendTo($('#ImageCapturer-ImageDescription'));
 }
@@ -93,7 +94,8 @@ function addCurrentURL(){
         .css({
             margin: '10px auto',
             'text-align': 'center',
-            padding : '0px 5px'
+            padding : '0px 5px',
+            color: 'white'
         })
         .appendTo($('#ImageCapturer-ImageDescription'));
 }
